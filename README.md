@@ -1,5 +1,5 @@
 # Money To Words Converter
-A php library that helps onvetr any money value in digit to its corresponging word
+A php library that helps onvetr any money value in digit to its corresponging sentences
 
 # Usage
 ```php
