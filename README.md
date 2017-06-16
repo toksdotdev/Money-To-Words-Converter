@@ -5,6 +5,7 @@ A php library that helps onvetr any money value in digit to its corresponging wo
 ```php
 
 $money = 748247284782;
+
 //naira
 $converter = new MoneyToWordsConverter($money, "naira");
 echo ($converter->Convert());
