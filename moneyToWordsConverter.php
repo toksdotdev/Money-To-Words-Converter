@@ -29,7 +29,7 @@
     public function Convert()
     {
       //makes string a round divisor of three at the end by adding zero to the initial numbers
-      $this->moneyInDigit = $this->MakeStringDivisibleBy3($this->moneyInDigit);
+      $this->moneyInDigit = $this->MakeStringDivisibleBy3(strval($this->moneyInDigit));
 
       return ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
     }
@@ -59,7 +59,10 @@
         return $stringOfNumbers;
     }
 
-
+    public function ChangeCurrency($currency)
+    {
+      $this->currency = $currency;
+    }
 
     /**
      * This does the whole work of converting the money value whose
@@ -77,7 +80,7 @@
       $temp = $notYetDoneHowManyTimes;
       // echo var_dump($subArrayHolder);
       
-      
+
       for ($i=0; $i < $temp; $i++) { 
 
         //picks the first group of the money from the front
