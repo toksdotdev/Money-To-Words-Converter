@@ -4,23 +4,34 @@
   * Author: TOCHUKWU NKEMDILIM
   * Date: 11:22am June-17-2017
   *
-  * 6,428,478,474,817,427,842
+  * USAGE:
+  * MoneyToWordsConverter converter = new MoneyToWordsConverter(87472482348, "naira");
+  * echo (converter.Convert());
+  *
+  * 
   */
   class MoneyToWordsConverter
   {
     protected $moneyInDigit;
+    protected $currency;
 
-    function __construct($moneyDigit)
+
+    function __construct($moneyDigit, $currency)
     {
       $this->moneyInDigit = $moneyDigit;
+      $this->currency = $currency;
     }
 
+    /**
+     * Performs the conversion of the given movey value from digit to words
+     * @return [string]                  [converted sentence]
+     */
     public function Convert()
     {
       //makes string a round divisor of three at the end by adding zero to the initial numbers
-      $this->moneyInDigit = ($this->make_string_Divisor_Of_three($this->moneyInDigit));
+      $this->moneyInDigit = $this->MakeStringDivisibleBy3($this->moneyInDigit);
 
-      return ucwords(strtolower($this->generate_money_number($this->moneyInDigit)));
+      return ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
     }
 
     /**
@@ -29,7 +40,7 @@
      * @param  [type] $stringOfNumbers [money value to check]
      * @return [string]                  [money value divisible by 3]
      */
-    private function make_string_Divisor_Of_three($stringOfNumbers)
+    private function MakeStringDivisibleBy3($stringOfNumbers)
     {
         $size = strlen($stringOfNumbers);
         
@@ -57,14 +68,16 @@
      * @param  [string] $moneyValueInString [money value to convert to words]
      * @return [string]                     [the english sentence of the corresponding money value ]
      */
-    private function generate_money_number($moneyValueInString)
+    private function GenerateSentence($moneyValueInString)
     {
-      $subArrayHolder = ($this->split_to_three($moneyValueInString));
+      $subArrayHolder = ($this->SplitToThree($moneyValueInString));
       $notYetDoneHowManyTimes = count($subArrayHolder);
       $mainText = "";
 
       $temp = $notYetDoneHowManyTimes;
-
+      // echo var_dump($subArrayHolder);
+      
+      
       for ($i=0; $i < $temp; $i++) { 
 
         //picks the first group of the money from the front
@@ -73,51 +86,118 @@
         for ($j = 0; $j < 2; $j++) { 
           if ($j == 0) {
             if (!($idleHolder[$j] == 0)) {
-              $mainText .= ", " . ($this->first_and_last_digit($idleHolder[$j]));
-              $mainText .= " Hundred and ";
-            }
+              $mainText .= str_replace(" and ", ", ", ($this->ConvertFirstOrLastDigit($idleHolder[$j])) );
 
-          } elseif ($j == 1) {
+              if (($idleHolder[$j + 1] == 0) && !($i == (count($subArrayHolder) - 2))) {
+                $mainText .= " hundred";
+              }
+              else
+              {
+                $mainText .= " hundred";
+              }
+            }            
+          } 
+          elseif ($j == 1) {
             if (!($idleHolder[$j] == 0)) {
               
               if (($idleHolder[$j] == 1)) {
-                $mainText .= ($this->middle_one_digit(($idleHolder[$j] . $idleHolder[($j + 1)])));
+                $mainText .= ($this->ConvertMiddleDigitWith_1(($idleHolder[$j] . $idleHolder[($j + 1)])));
 
                 //add billion | million | thousand etc
-                $mainText .= " " . ($this->hundreds_mill_thousands($notYetDoneHowManyTimes)) . ", ";
+                $mainText .= " " . ($this->ConvertTo_Trill_Mill_Hund_Thou($notYetDoneHowManyTimes));
               }
               else { //not number 1 digit
-                $mainText .= ($this->tens_for_none_one_second_digit($idleHolder[$j]));
-
-                $mainText .=  "-" . ($this->first_and_last_digit($idleHolder[$j + 1]));
+                $mainText .= ($this->ConvertTensForNon_1_MiddleDigit($idleHolder[$j]));
+                
+                if (($i == ($temp - 2)) && ($subArrayHolder[$i][2] == 0)) {
+                  $mainText .= ($this->ConvertFirstOrLastDigit($idleHolder[$j + 1]));
+                }
+                else
+                {
+                  if ($idleHolder[$j + 1] == 0) {
+                    $mainText .= ($this->ConvertFirstOrLastDigit($idleHolder[$j + 1]));  
+                  }
+                  else
+                  {
+                    $mainText .=  "-" . ($this->ConvertFirstOrLastDigit($idleHolder[$j + 1]));
+                  }
+                }
 
                 //add billion | million | thousand etc
-                $mainText .= " " . ($this->hundreds_mill_thousands($notYetDoneHowManyTimes));
+                if (($i == ($temp - 2))) {
+                  $mainText .= " " . ($this->ConvertTo_Trill_Mill_Hund_Thou($notYetDoneHowManyTimes)) . ",  ";
+                }
+                else
+                {
+                  if ((($idleHolder[$j + 1] == 0) && ($notYetDoneHowManyTimes == 1)) ||
+                      ($notYetDoneHowManyTimes == 1)) {
+                    $mainText .= " " . ($this->ConvertTo_Trill_Mill_Hund_Thou($notYetDoneHowManyTimes)) . " ";
+                  }
+                  else
+                  {
+                    $mainText .= " " . ($this->ConvertTo_Trill_Mill_Hund_Thou($notYetDoneHowManyTimes)) . ", ";
+                  }
+                }
               }
+            }
+            else
+            {
+              $mainText .= ($this->ConvertFirstOrLastDigit(($idleHolder[$j + 1])));
+              $mainText .= " " . ($this->ConvertTo_Trill_Mill_Hund_Thou($notYetDoneHowManyTimes)) . ", ";
             }
           }
         }
-
         $notYetDoneHowManyTimes -= 1;
       }
 
-      $mainText .= " naira only";
+      $mainText = $this->CorrectSentence($mainText);
 
       return $mainText;
     }
 
+
+
+    /**
+     * Removes unecessary characters and literals that make sentence incorrect
+     * @param [string] $mainText [Corrected sentence of the money value converted]
+     */
+    private function CorrectSentence($mainText)
+    {
+      $mainText .= "{$this->currency} only";
+      
+      $mainText = str_replace("and  , ", "", $mainText);
+      $mainText = str_replace("- and ", "-", $mainText);
+      $mainText = str_replace(",  and", ",", $mainText);
+      $mainText = str_replace(", ,", ",", $mainText);
+      $mainText = str_replace(",  ,", ",", $mainText);
+      $mainText = str_replace(", {$this->currency} only", "{$this->currency} only", $mainText);
+
+      if(substr($mainText, 0, 5) == " and ")
+      {
+        $mainText = substr($mainText, 4);
+      }
+
+      if (substr($mainText, 0, 2) == ", ") {
+        $mainText = substr($mainText, 1);
+      }
+
+      //REMOVES LAST TRAILING SPACE AT THE BEGINNING OF THE SENTENCE
+      if ($mainText[0] = " ") {
+        $mainText = substr($mainText, 1);
+      }
+      
+      return $mainText;
+    }
 
     /**
      * Split an already divisible by 3 string to arrays of size 3 each
      * @param  [string] $stringOfNumbers [string to split]
      * @return [array]                  [array of sets of 3 digits each]
      */
-    function split_to_three($stringOfNumbers)
+    function SplitToThree($stringOfNumbers)
     {
       $size = strlen($stringOfNumbers);
       $subArrayHolder = array();
-      // $howManyGroups = (($size - ($size % 3)) / 3); //didnt know how to do integer division in php, so did this instead
-      //  echo "$howManyGroups";
 
       for ($i = 0; $i < $size; $i += 3) {
         $firstDigit = "";
@@ -145,7 +225,7 @@
      * @param  [integer] $digit [digit to convert to word]
      * @return [string]        [digit in word]
      */
-    private function first_and_last_digit($digit)
+    private function ConvertFirstOrLastDigit($digit)
     {
       $words = "";
 
@@ -195,7 +275,7 @@
           break;
       }
 
-      return $words;
+      return ($words == "") ? $words : (" and " . $words);
     }
 
 
@@ -204,7 +284,7 @@
      * @param  [integer] $oneDigits [digit to convert to word]
      * @return [string]        [digit in its tens word]
      */
-    function middle_one_digit($oneDigits)
+    private function ConvertMiddleDigitWith_1($oneDigits)
     {
       $words = "";
 
@@ -254,7 +334,7 @@
           break;
       }
 
-      return $words;
+      return ($words == "") ? $words : (" and " . $words);
     }
 
 
@@ -263,7 +343,7 @@
      * @param  [integer] $digit [digit to convert to word]
      * @return [string]        [digit in word]
      */
-    function tens_for_none_one_second_digit($digit)
+    private function ConvertTensForNon_1_MiddleDigit($digit)
     {
       $words = "";
 
@@ -272,35 +352,35 @@
           $words = "";
           break;
         case '2':
-          $words = "Twenty";
+          $words = "twenty";
           break;
         
         case '3':
-          $words = "Thirty";
+          $words = "thirty";
           break;
 
         case '4':
-          $words = "Forty";
+          $words = "forty";
           break;
 
         case '5':
-          $words = "Fifty";
+          $words = "fifty";
           break;
 
         case '6':
-          $words = "Sixty";
+          $words = "sixty";
           break;
 
         case '7':
-          $words = "Seventy";
+          $words = "seventy";
           break;
 
         case '8':
-          $words = "Eighty";
+          $words = "eighty";
           break;
 
         case '9':
-          $words = "Ninety";
+          $words = "ninety";
           break;
 
         default:
@@ -308,18 +388,18 @@
           break;
       }
 
-      return $words;
+      return ($words == "") ? $words : (" and " . $words);
     }
 
     
     /**
-     * Converts only the first digit in the 3-size array to its corresponding word\
+     * Converts only the first digit in the 3-size array to its corresponding word
      * 
      * [try this only at first  digit]
      * @param  [integer] $whichBlock [digit to convert to word]
      * @return [string]        [digit in word]
      */
-    function hundreds_mill_thousands($whichBlock)
+    private function ConvertTo_Trill_Mill_Hund_Thou($whichBlock)
     {
       $words = "";
 
@@ -343,7 +423,7 @@
           $words = "trillion";
           break;
         default:
-          $words = "Not yet defined this length";
+          $words = "[Not yet defined this length] ===>>>";
           break;
       }
 

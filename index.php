@@ -1,3 +1,4 @@
+<!-- INCLUDE MONEY TO WORD CONVERTER TO FILE -->
 <?php include 'moneytowordsconverter.php';  ?>
 
 <!DOCTYPE html>
@@ -9,10 +10,14 @@
   <body>
     
     <!-- implemantation -->
-    <?php 
-      $converter = new MoneyToWordsConverter("54863467300000");
+    <?php
 
-      echo ($converter->Convert());
+      //FOR API, YOU COULD USE THIS
+      $money = $_GET['money'];
+
+      $converter = new MoneyToWordsConverter($money, "naira");
+
+      echo ($converter->Convert()); 
     ?>
 
   </body>
