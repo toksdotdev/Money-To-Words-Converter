@@ -22,6 +22,7 @@
       $this->currency = $currency;
     }
 
+
     /**
      * Performs the conversion of the given movey value from digit to words
      * @return [string]                  [converted sentence]
@@ -40,6 +41,7 @@
         throw new Exception("Invalid inputs");
       } 
     }
+
 
     /**
      * If the length of the money is not divisible by 3, 
@@ -66,6 +68,11 @@
         return $stringOfNumbers;
     }
 
+
+    /**
+     * Change the currency for money value
+     * @param [string] $currency [currency in word e.g. naira, dollar, pounds, yens etc.]
+     */
     public function ChangeCurrency($currency)
     {
       $this->currency = $currency;
@@ -164,7 +171,6 @@
 
       return $mainText;
     }
-
 
 
     /**
