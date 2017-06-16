@@ -28,10 +28,17 @@
      */
     public function Convert()
     {
-      //makes string a round divisor of three at the end by adding zero to the initial numbers
-      $this->moneyInDigit = $this->MakeStringDivisibleBy3(strval($this->moneyInDigit));
+      try
+      {
+        //makes string a round divisor of three at the end by adding zero to the initial numbers
+        $this->moneyInDigit = $this->MakeStringDivisibleBy3(strval($this->moneyInDigit));
 
-      return ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
+        return ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
+      }
+      catch(Exception $ex)
+      {
+        throw new Exception("Invalid inputs");
+      } 
     }
 
     /**
@@ -426,11 +433,12 @@
           $words = "trillion";
           break;
         default:
-          $words = "[Not yet defined this length] ===>>>";
+          throw new Exception("Invalid Input");
           break;
       }
-
+    
       return $words;
     }
+    
   }
 ?>
