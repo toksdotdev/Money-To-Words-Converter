@@ -1,281 +1,353 @@
-<?php 
-		function mainer($moneyValue)
-		{
-			//makes string a round divisor of three at the end by adding zeroto the initial numbers
-			$moneyValue = (make_string_Divisor_Of_three($moneyValue));
+<?php
+  /**
+  * Coverts a money value to senetence
+  * Author: TOCHUKWU NKEMDILIM
+  * Date: 11:22am June-17-2017
+  *
+  * 6,428,478,474,817,427,842
+  */
+  class MoneyToWordsConverter
+  {
+    protected $moneyInDigit;
 
-			echo "<b><a style=\"color:red\">" . (generate_money_number($moneyValue)) . "</a></b>";
-		}
+    function __construct($moneyDigit)
+    {
+      $this->moneyInDigit = $moneyDigit;
+    }
 
-		function generate_money_number($moneyValueInString)
-		{
-			$subArrayHolder = (split_to_three($moneyValueInString));
-			$notYetDoneHowManyTimes = count($subArrayHolder);
-			$mainText ="";
+    public function Convert()
+    {
+      //makes string a round divisor of three at the end by adding zero to the initial numbers
+      $this->moneyInDigit = ($this->make_string_Divisor_Of_three($this->moneyInDigit));
 
-				$temp = $notYetDoneHowManyTimes;
-			for ($i=0; $i < $temp; $i++) { 
-				//picks the first group of the money from the front
-				$idleHolder = $subArrayHolder[$i];
+      return ucwords(strtolower($this->generate_money_number($this->moneyInDigit)));
+    }
 
-				for ($j=0; $j < 2; $j++) { 
-					if ($j == 0) {
-						if (!($idleHolder[$j] == 0)) {
-							$mainText .= ", " . (first_and_last_digit($idleHolder[$j]));
-							$mainText .= " Hundred and ";
-						}
-					}elseif ($j == 1) {
-						if (!($idleHolder[$j] == 0)) {
-							if (($idleHolder[$j] == 1)) {
-								$mainText .= (middle_one_digit(($idleHolder[$j] . $idleHolder[($j + 1)])));
+    /**
+     * If the length of the money is not divisible by 3, 
+     * make it divisible by 3 by adding zero's to make it divisible by 3
+     * @param  [type] $stringOfNumbers [money value to check]
+     * @return [string]                  [money value divisible by 3]
+     */
+    private function make_string_Divisor_Of_three($stringOfNumbers)
+    {
+        $size = strlen($stringOfNumbers);
+        
+        //this if statement ensure that the figure is a round divisor of three
+        if (!(($size % 3) == 0)) {
+          $holdRemainingSize = (3 - ($size % 3));//return remaining
+          $temporaryString = $stringOfNumbers;
+          $stringOfNumbers = "";
 
-								//add hundred_mill_thousand
-								$mainText .= " " . (hundreds_mill_thousands($notYetDoneHowManyTimes)) . ", ";
-							}else { //not number 1 digit
-								$mainText .= (tens_for_none_one_second_digit($idleHolder[$j]));
+          for ($i = 0; $i < $holdRemainingSize; $i++) { 
+            $stringOfNumbers .= '0';
+          }
 
-								$mainText .=  "-" . (first_and_last_digit($idleHolder[$j + 1]));
+          $stringOfNumbers .= $temporaryString;
+        }
+        return $stringOfNumbers;
+    }
 
-								//add hundred_mill_thousand
-								$mainText .= " " . (hundreds_mill_thousands($notYetDoneHowManyTimes));
-							}
-						}
-					}
-				}
-				$notYetDoneHowManyTimes -= 1;
-			}
-			$mainText .= " naira only";
 
-			return $mainText;
-		}
 
-		function make_string_Divisor_Of_three($stringOfNumbers)
-		{
-				$size = strlen($stringOfNumbers);
-				
-				//this if statement ensure that the figure is a round divisor of three
-				if (!(($size % 3) == 0)) {
-					$holdRemainingSize = (3 -($size % 3));//return remaining
-					$temporaryString = $stringOfNumbers;
-					$stringOfNumbers = "";
+    /**
+     * This does the whole work of converting the money value whose
+     * length that has been made divisible by 3 into words
+     * [e.g. 003,472,747  ; 045,532,453]
+     * @param  [string] $moneyValueInString [money value to convert to words]
+     * @return [string]                     [the english sentence of the corresponding money value ]
+     */
+    private function generate_money_number($moneyValueInString)
+    {
+      $subArrayHolder = ($this->split_to_three($moneyValueInString));
+      $notYetDoneHowManyTimes = count($subArrayHolder);
+      $mainText = "";
 
-					for ($i=0; $i < $holdRemainingSize; $i++) { 
-						$stringOfNumbers .= '0';
-					}
-					$stringOfNumbers .= $temporaryString;
-				}
-				return $stringOfNumbers;
-		}
+      $temp = $notYetDoneHowManyTimes;
 
-		function split_to_three($stringOfNumbers)
-		{
-			$size = strlen($stringOfNumbers);
-			$subArrayHolder = array();
-			// $howManyGroups = (($size - ($size % 3)) / 3); //didnt know how to do integer division in php, so did this instead
-			// 	echo "$howManyGroups";
+      for ($i=0; $i < $temp; $i++) { 
 
-			for ($i=0; $i < $size; $i += 3) {
-				$a = "";
-				$b = "";
-				$c = "";
-				if ((!empty($stringOfNumbers[$i])) || ($stringOfNumbers[$i] == 0)) {
-					$a = $stringOfNumbers[$i];
-				}
+        //picks the first group of the money from the front
+        $idleHolder = $subArrayHolder[$i];
 
-				if ((!empty($stringOfNumbers[$i + 1])) || ($stringOfNumbers[$i + 1] == 0)) {
-					$b = $stringOfNumbers[$i + 1];
-				}
+        for ($j = 0; $j < 2; $j++) { 
+          if ($j == 0) {
+            if (!($idleHolder[$j] == 0)) {
+              $mainText .= ", " . ($this->first_and_last_digit($idleHolder[$j]));
+              $mainText .= " Hundred and ";
+            }
 
-				if ((!empty($stringOfNumbers[$i + 2])) || ($stringOfNumbers[$i + 2] == 0)) {
-					$c = $stringOfNumbers[$i + 2];
-				}
-				array_push($subArrayHolder, array(intval("{$a}"), intval("{$b}"), intval("{$c}")));
-			}
-			return $subArrayHolder;
-		}
+          } elseif ($j == 1) {
+            if (!($idleHolder[$j] == 0)) {
+              
+              if (($idleHolder[$j] == 1)) {
+                $mainText .= ($this->middle_one_digit(($idleHolder[$j] . $idleHolder[($j + 1)])));
 
-		function first_and_last_digit($digit)
-		{
+                //add billion | million | thousand etc
+                $mainText .= " " . ($this->hundreds_mill_thousands($notYetDoneHowManyTimes)) . ", ";
+              }
+              else { //not number 1 digit
+                $mainText .= ($this->tens_for_none_one_second_digit($idleHolder[$j]));
 
-			$words = "";
+                $mainText .=  "-" . ($this->first_and_last_digit($idleHolder[$j + 1]));
 
-			switch ($digit) {
-				case '0':
-					$words = "";
-					break;
-				case '1':
-					$words = "one";
-					break;
+                //add billion | million | thousand etc
+                $mainText .= " " . ($this->hundreds_mill_thousands($notYetDoneHowManyTimes));
+              }
+            }
+          }
+        }
 
-				case '2':
-					$words = "two";
-					break;
+        $notYetDoneHowManyTimes -= 1;
+      }
 
-				case '3':
-					$words = "three";
-					break;
+      $mainText .= " naira only";
 
-				case '4':
-					$words = "four";
-					break;
+      return $mainText;
+    }
 
-				case '5':
-					$words = "five";
-					break;
 
-				case '6':
-					$words = "six";
-					break;
+    /**
+     * Split an already divisible by 3 string to arrays of size 3 each
+     * @param  [string] $stringOfNumbers [string to split]
+     * @return [array]                  [array of sets of 3 digits each]
+     */
+    function split_to_three($stringOfNumbers)
+    {
+      $size = strlen($stringOfNumbers);
+      $subArrayHolder = array();
+      // $howManyGroups = (($size - ($size % 3)) / 3); //didnt know how to do integer division in php, so did this instead
+      //  echo "$howManyGroups";
 
-				case '7':
-					$words = "seven";
-					break;
+      for ($i = 0; $i < $size; $i += 3) {
+        $firstDigit = "";
+        $secondDigit = "";
+        $thirdDigit = "";
 
-				case '8':
-					$words = "eight";
-					break;
+        if ((!empty($stringOfNumbers[$i])) || ($stringOfNumbers[$i] == 0)) {
+          $firstDigit = $stringOfNumbers[$i];
+        }
 
-				case '9':
-					$words = "nine";
-					break;
-				default:
-					$words = "";
-					break;
-			}
+        if ((!empty($stringOfNumbers[$i + 1])) || ($stringOfNumbers[$i + 1] == 0)) {
+          $secondDigit = $stringOfNumbers[$i + 1];
+        }
 
-			return $words;
-		}
+        if ((!empty($stringOfNumbers[$i + 2])) || ($stringOfNumbers[$i + 2] == 0)) {
+          $thirdDigit = $stringOfNumbers[$i + 2];
+        }
+        array_push($subArrayHolder, array(intval("{$firstDigit}"), intval("{$secondDigit}"), intval("{$thirdDigit}")));
+      }
+      return $subArrayHolder;
+    }
 
-		function middle_one_digit($oneDigits)
-		{
-			$words = "";
+    /**
+     * Converts every first and last digit in the size 3 array to their corresponding word
+     * @param  [integer] $digit [digit to convert to word]
+     * @return [string]        [digit in word]
+     */
+    private function first_and_last_digit($digit)
+    {
+      $words = "";
 
-			switch ($oneDigits) {
-				case '10':
-					$words = "ten";
-					break;
-				
-				case '11':
-					$words = "eleven";
-					break;
+      switch ($digit) {
+        case '0':
+          $words = "";
+          break;
 
-				case '12':
-					$words = "twelve";
-					break;
+        case '1':
+          $words = "one";
+          break;
 
-				case '13':
-					$words = "thirteen";
-					break;
+        case '2':
+          $words = "two";
+          break;
 
-				case '14':
-					$words = "fourteen";
-					break;
+        case '3':
+          $words = "three";
+          break;
 
-				case '15':
-					$words = "fifteen";
-					break;
+        case '4':
+          $words = "four";
+          break;
 
-				case '16':
-					$words = "sixteen";
-					break;
+        case '5':
+          $words = "five";
+          break;
 
-				case '17':
-					$words = "seventeen";
-					break;
+        case '6':
+          $words = "six";
+          break;
 
-				case '18':
-					$words = "eighteen";
-					break;
+        case '7':
+          $words = "seven";
+          break;
 
-				case '19':
-					$words = "nineteen";
-					break;
+        case '8':
+          $words = "eight";
+          break;
 
-				default:
-					$words = "";
-					break;
-			}
+        case '9':
+          $words = "nine";
+          break;
+        
+        default:
+          $words = "";
+          break;
+      }
 
-			return $words;
-		}
+      return $words;
+    }
 
-		function tens_for_none_one_second_digit($digit)
-		{
-			$words = "";
 
-			switch ($digit) {
-				case '0':
-					$words = "";
-					break;
-				case '2':
-					$words = "Twenty";
-					break;
-				
-				case '3':
-					$words = "Thirty";
-					break;
+    /**
+     * Converts the middle(2nd) digit [less than 20] in the size 3 array to its corresponding tens as word
+     * @param  [integer] $oneDigits [digit to convert to word]
+     * @return [string]        [digit in its tens word]
+     */
+    function middle_one_digit($oneDigits)
+    {
+      $words = "";
 
-				case '4':
-					$words = "Forty";
-					break;
+      switch ($oneDigits) {
+        case '10':
+          $words = "ten";
+          break;
+        
+        case '11':
+          $words = "eleven";
+          break;
 
-				case '5':
-					$words = "Fifty";
-					break;
+        case '12':
+          $words = "twelve";
+          break;
 
-				case '6':
-					$words = "Sixty";
-					break;
+        case '13':
+          $words = "thirteen";
+          break;
 
-				case '7':
-					$words = "Seventy";
-					break;
+        case '14':
+          $words = "fourteen";
+          break;
 
-				case '8':
-					$words = "Eighty";
-					break;
+        case '15':
+          $words = "fifteen";
+          break;
 
-				case '9':
-					$words = "Ninety";
-					break;
+        case '16':
+          $words = "sixteen";
+          break;
 
-				default:
-					$words = "";
-					break;
-			}
+        case '17':
+          $words = "seventeen";
+          break;
 
-			return $words;
-		}
+        case '18':
+          $words = "eighteen";
+          break;
 
-		//try this only at first  digit
-		function hundreds_mill_thousands($whichBlock)
-		{
-			$words = "";
+        case '19':
+          $words = "nineteen";
+          break;
 
-			switch ($whichBlock) {
-				case '1':
-					$words = "";
-					break;
-				case '2':
-					$words = "thousand";
-					break;
+        default:
+          $words = "";
+          break;
+      }
 
-				case '3':
-					$words = "million";
-					break;
+      return $words;
+    }
 
-				case '4':
-					$words = "billion";
-					break;
 
-				case '5':
-					$words = "zillion";
-					break;
-				default:
-					$words = "Not yet defined this length";
-					break;
-			}
+    /**
+     * Converts the middle(2nd) digit [greate than or equal to 20] in the 3-size array to its corresponding tens as word
+     * @param  [integer] $digit [digit to convert to word]
+     * @return [string]        [digit in word]
+     */
+    function tens_for_none_one_second_digit($digit)
+    {
+      $words = "";
 
-			return $words;
-		} //contains necessary methods/functions
+      switch ($digit) {
+        case '0':
+          $words = "";
+          break;
+        case '2':
+          $words = "Twenty";
+          break;
+        
+        case '3':
+          $words = "Thirty";
+          break;
+
+        case '4':
+          $words = "Forty";
+          break;
+
+        case '5':
+          $words = "Fifty";
+          break;
+
+        case '6':
+          $words = "Sixty";
+          break;
+
+        case '7':
+          $words = "Seventy";
+          break;
+
+        case '8':
+          $words = "Eighty";
+          break;
+
+        case '9':
+          $words = "Ninety";
+          break;
+
+        default:
+          $words = "";
+          break;
+      }
+
+      return $words;
+    }
+
+    
+    /**
+     * Converts only the first digit in the 3-size array to its corresponding word\
+     * 
+     * [try this only at first  digit]
+     * @param  [integer] $whichBlock [digit to convert to word]
+     * @return [string]        [digit in word]
+     */
+    function hundreds_mill_thousands($whichBlock)
+    {
+      $words = "";
+
+      switch ($whichBlock) {
+        case '1':
+          $words = "";
+          break;
+        case '2':
+          $words = "thousand";
+          break;
+
+        case '3':
+          $words = "million";
+          break;
+
+        case '4':
+          $words = "billion";
+          break;
+
+        case '5':
+          $words = "trillion";
+          break;
+        default:
+          $words = "Not yet defined this length";
+          break;
+      }
+
+      return $words;
+    }
+  }
 ?>
