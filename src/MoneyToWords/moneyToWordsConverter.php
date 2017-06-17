@@ -11,6 +11,8 @@
   * TO THE GLORY OF CHRIST JESUS
   */
  
+  namespace MoneyToWords;
+  
   class MoneyToWordsConverter
   {
     protected $moneyInDigit;
