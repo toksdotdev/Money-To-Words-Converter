@@ -10,6 +10,10 @@
   *
   * 
   */
+ 
+   
+  namespace MoneyToWords;
+
   class MoneyToWordsConverter
   {
     protected $moneyInDigit;
