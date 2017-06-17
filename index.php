@@ -17,7 +17,7 @@
       
       //or
       
-      $money = 748247284782;
+      //$money = 748247284782;
 
       //naira
       $converter = new MoneyToWordsConverter($money, "naira");

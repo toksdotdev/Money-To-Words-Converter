@@ -8,8 +8,9 @@
   * MoneyToWordsConverter converter = new MoneyToWordsConverter(87472482348, "naira");
   * echo (converter.Convert());
   *
-  * 
+  * TO THE GLORY OF CHRIST JESUS
   */
+ 
   class MoneyToWordsConverter
   {
     protected $moneyInDigit;
