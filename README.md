@@ -1,22 +1,42 @@
 # Money To Words Converter
-A php library that helps onvetr any money value in digit to its corresponging word
+A php library that converts any money value from digits to its corresponging word
 
 # Installation
-* Execute ``` composer require christs_dev/money-to-words-converter ``` to install
-* Paste the code below into the php file where you want to use money converter
+* Install this package via [Composer](https://getcomposer.org).
+```php
+composer require christs_dev/money-to-words-converter 
+```
+
+* Or edit your project's ```composer.json``` to require ```christs_dev/money-to-words-converter``` and then run ```composer update ```.
+```php
+"require": {
+    "christs_dev/money-to-words-converter": "*"
+}
+```
+
+
+
+# Usage
+**Basic usage**
+> Note: You should have composer's autoloader included ``` require 'vendor/autoload.php' ```
+
+<br>
+
+* Include **MoneyToWordsCoverter** namespace to your php file
 
 ```php
 
 <?php
-  require_once __DIR__ . '/vendor/autoload.php';
 
   use MoneyToWords\MoneyToWordsConverter;
+
 ?>
 
 ```
+<br>
 
+* Instantiate the **MoneyToWordsConverter** object
 
-# Usage
 ```php
 
 $money = 748247284782;
@@ -29,6 +49,7 @@ echo ($converter->Convert());
 
 
 # Change Currency
+To change the currency of the money to convert
 ```php
 
 //dollar
