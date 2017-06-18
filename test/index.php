@@ -26,16 +26,24 @@
       * e.g. moneyconveter.com/test?money=4984894989834894
       */
       
-      $money = 748247284782;
+      $money = "八百七十二万七千八百二十四";
 
       //naira
-      $converter = new MoneyToWordsConverter($money, "naira");
-      echo ($converter->Convert());
-
+      $converter = new MoneyToWordsConverter($money, "naira", 'en');
+      
+      echo $converter->Convert();
+      
       echo "<br>";
 
       //dollar
       $converter->ChangeCurrency("dollars");
+      echo ($converter->Convert());
+
+      echo "<br>";
+
+      
+      $converter->SetMoneyValue(28747847);
+      $converter->SetCurrency("dollars");
       echo ($converter->Convert());
     ?>
 

@@ -8,22 +8,162 @@
   * MoneyToWordsConverter converter = new MoneyToWordsConverter(87472482348, "naira");
   * echo (converter.Convert());
   *
-  * TO THE GLORY OF CHRIST JESUS
+  * LET ALL THE GLORY OF CHRIST JESUS
+  * 
   */
  
   namespace MoneyToWords;
   
+  use Stichoza\GoogleTranslate\TranslateClient;
+
   class MoneyToWordsConverter
   {
+    /**
+     * Money to convert in digit
+     * 
+     * [ A list of numeric systems can be found at: https://en.wikipedia.org/wiki/List_of_numeral_systems ]
+     * 
+     * @var [any numeric system value e.g. greek, babylonians, etc]
+     */
     protected $moneyInDigit;
+
+
+    /**
+     * The currency to state such money value
+     * @var [string]
+     */
     protected $currency;
 
 
-    function __construct($moneyDigit, $currency)
+    /**
+     * The language of the money value (numeral) inserted
+     * @var [string]
+     */
+    protected $languageFrom;
+
+
+    /**
+     * Language to convert money value into
+     * @var [string]
+     */
+    protected $languageTo;
+
+
+    /**
+     * The google translator object
+     * @var [Object]
+     */
+    protected $translator;
+
+
+
+    /**
+     * [Initialises the MoneyToWordsConverter object]
+     * @param [numeric] $moneyDigit [Money value of any language, in which should be converted to words ]
+     * @param [string] $currency   [currency to convert money to]
+     * @param string $languageTo [language to convert money in words to]
+     */
+    function __construct($moneyDigit, $currency, $languageTo = 'en')
     {
       $this->moneyInDigit = $moneyDigit;
       $this->currency = $currency;
+      $this->languageTo = $languageTo;
+      $this->translator = new TranslateClient(null, $languageTo);
     }
+
+
+
+
+    /**
+     * Detects the language of the just converted value
+     */
+    public function DetectInputLanguage()
+    {
+      //detect digit language
+      return $this->translator->getLastDetectedSource();
+    }
+
+
+
+    /**
+     * Checks if the input specified is in greek numeric system [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+     */
+    private function IsLanguageEnglish()
+    {
+      $numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+      try
+      {
+        //detect digit language and translate
+        if ( in_array(strval($this->moneyInDigit[0]), $numbers) ) {
+          
+          if (!($this->moneyInDigit == 'm/[^a-zA-Z0-9]/')) {
+
+            //is english
+            $this->laguageFrom = 'en';
+
+            return true;
+          }
+        }
+
+        return false;
+      }
+      catch(Exception $ex)
+      {
+        return false;
+      }
+    }
+
+
+
+    /**
+     * Translates the money value to the current language target
+     */
+    private function TranslateMoneyValueToEnglish()
+    {
+      //set english as the language to convert into
+      $this->TranslateMoneyValue('en');
+    }
+
+
+
+
+    /**
+     * Translates the money input to any language
+     * @param [sting] $language [language tot convert to]
+     */
+    private function TranslateMoneyValue($language)
+    {
+      try
+      {
+        //set translation language to users choice
+        $this->translator->setTarget($language);
+
+        //sets the moneyDigit to the english version of the [foreign-language money-value] entered
+        $this->moneyInDigit = $this->translator->translate($this->moneyInDigit);
+
+        //reset translator back to original language set by user
+        $this->translator->setTarget($this->languageTo);
+      }
+      catch (Exception $ex)
+      {
+        throw new Exception("Error translating. Please insert a valid input");
+      }
+    }
+
+
+
+
+    /**
+     * sets the language to translate into, to users choice
+     * @param [string] $languageTo [language to translate to]
+     */
+    public function SetLanguage($languageTo)
+    {
+      $this->$languageTo = $languageTo;
+    }
+
+
 
 
     /**
@@ -32,18 +172,45 @@
      */
     public function Convert()
     {
+      //check if input is in english numeric system
+      if(!$this->IsLanguageEnglish())
+      {
+        //Translate to greek numeric system [0, 1, 2, 3, 4, 5, 6, 7, 8, 9s]
+        $this->TranslateMoneyValue('el');
+      }
+
+      //convert digit entered[already in english numeric system]
       try
       {
+
         //makes string a round divisor of three at the end by adding zero to the initial numbers
         $this->moneyInDigit = $this->MakeStringDivisibleBy3(strval($this->moneyInDigit));
+        
 
-        return ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
+        //convert to words
+        $moneyValueInWords = ucfirst(strtolower($this->GenerateSentence($this->moneyInDigit)));
+        
+        
+        //Final Translation is not english, return translation version
+        if (!($this->languageTo == 'en')) {
+          
+          //sets the language to translate to users input, to ensure no un -selected translation is performed
+          $this->SetLanguage($this->languageTo);
+
+          //translate into the language user specifies
+          return $this->translator->translate($moneyValueInWords);
+        }
+        
+        //return english instead
+        return $moneyValueInWords;
       }
       catch(Exception $ex)
       {
         throw new Exception("Invalid inputs");
       } 
     }
+
+
 
 
     /**
@@ -72,14 +239,30 @@
     }
 
 
+
+
+
     /**
-     * Change the currency for money value
+     * Set a new currency for money value
      * @param [string] $currency [currency in word e.g. naira, dollar, pounds, yens etc.]
      */
-    public function ChangeCurrency($currency)
+    public function SetCurrency($currency)
     {
       $this->currency = $currency;
     }
+
+
+
+    /**
+     * Set a new money value to convert
+     * @param [numeric] $moneyValue [money value to convert]
+     */
+    public function SetMoneyValue($moneyValue)
+    {
+        $this->moneyInDigit = $moneyValue;
+    }
+
+
 
     /**
      * This does the whole work of converting the money value whose
@@ -176,6 +359,8 @@
     }
 
 
+
+
     /**
      * Removes unecessary characters and literals that make sentence incorrect
      * @param [string] $mainText [Corrected sentence of the money value converted]
@@ -208,6 +393,9 @@
       return $mainText;
     }
 
+
+
+
     /**
      * Split an already divisible by 3 string to arrays of size 3 each
      * @param  [string] $stringOfNumbers [string to split]
@@ -238,6 +426,9 @@
       }
       return $subArrayHolder;
     }
+
+
+
 
     /**
      * Converts every first and last digit in the size 3 array to their corresponding word
@@ -296,6 +487,9 @@
 
       return ($words == "") ? $words : (" and " . $words);
     }
+
+
+
 
 
     /**
@@ -357,6 +551,9 @@
     }
 
 
+
+
+
     /**
      * Converts the middle(2nd) digit [greate than or equal to 20] in the 3-size array to its corresponding tens as word
      * @param  [integer] $digit [digit to convert to word]
@@ -411,6 +608,9 @@
     }
 
     
+
+
+
     /**
      * Converts only the first digit in the 3-size array to its corresponding word
      * 
