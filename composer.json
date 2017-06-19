@@ -1,6 +1,6 @@
 {
     "name": "christs_dev/money-to-words-converter",
-    "description": "A php library that converts any money value to words",
+    "description": "A php library that converts any money value in digit in any language or numeric system to its words in any language",
     "type": "library",
     "license": "MIT",
     "authors": [
