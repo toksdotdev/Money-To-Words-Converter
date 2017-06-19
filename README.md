@@ -1,5 +1,6 @@
 # Money To Words Converter
-A php library that converts any money value from digits to its corresponging word
+
+A php library that converts any money value in digit in any language or numeric system to its words in any language
 
 # Installation
 * Install this package via [Composer](https://getcomposer.org).
@@ -13,8 +14,6 @@ composer require christs_dev/money-to-words-converter
     "christs_dev/money-to-words-converter": "*"
 }
 ```
-
-
 
 # Usage
 **Basic usage**
