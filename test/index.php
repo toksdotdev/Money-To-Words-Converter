@@ -30,19 +30,18 @@
 
       //naira
       $converter = new MoneyToWordsConverter($money, "naira", 'en');
-      
       echo $converter->Convert();
-      
       echo "<br>";
 
       //dollar
       $converter->ChangeCurrency("dollars");
       echo ($converter->Convert());
-
       echo "<br>";
 
-      
+      //set new currency value
       $converter->SetMoneyValue(28747847);
+
+      //convert new currency value
       $converter->SetCurrency("dollars");
       echo ($converter->Convert());
     ?>
