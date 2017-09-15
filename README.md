@@ -11,7 +11,7 @@ composer require christs_dev/money-to-words-converter
 * Or edit your project's ```composer.json``` to require ```christs_dev/money-to-words-converter``` and then run ```composer update ```.
 ```php
 "require": {
-    "christs_dev/money-to-words-converter": "*"
+    "tnkemdilim/money-to-words-converter": "*"
 }
 ```
 
