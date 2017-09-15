@@ -5,7 +5,7 @@ A php library that converts any money value in digit in any language or numeric 
 # Installation
 * Install this package via [Composer](https://getcomposer.org).
 ```php
-composer require christs_dev/money-to-words-converter 
+composer require tnkemdilim/money-to-words-converter 
 ```
 
 * Or edit your project's ```composer.json``` to require ```christs_dev/money-to-words-converter``` and then run ```composer update ```.
