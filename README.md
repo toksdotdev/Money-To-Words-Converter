@@ -8,7 +8,7 @@ A php library that converts any money value in digit in any language or numeric 
 composer require tnkemdilim/money-to-words-converter 
 ```
 
-* Or edit your project's ```composer.json``` to require ```christs_dev/money-to-words-converter``` and then run ```composer update ```.
+* Or edit your project's ```composer.json``` to require ```tnkemdilim/money-to-words-converter``` and then run ```composer update ```.
 ```php
 "require": {
     "tnkemdilim/money-to-words-converter": "*"
