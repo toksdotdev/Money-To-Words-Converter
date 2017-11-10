@@ -56,6 +56,13 @@
     protected $translator;
 
 
+    protected $isDecimal = false;
+
+
+    protected $currencyForDecimal;
+
+
+    protected $trailingDecimal;
 
     /**
      * [Initialises the MoneyToWordsConverter object]
@@ -63,10 +70,27 @@
      * @param [string] $currency   [currency to convert money to]
      * @param string $languageTo [language to convert money in words to]
      */
-    function __construct($moneyDigit, $currency, $languageTo = 'en')
+    function __construct($moneyDigit, $currency, $languageTo = 'en',  $currencyForDecimal = '')
     {
-      $this->moneyInDigit = $moneyDigit;
+      //If it is a decimal value
+      if (strstr(strval($moneyDigit), '.')) {
+        $values = split($moneyDigit, '.');
+
+
+        $this->moneyInDigit = intval($values[0]);
+
+        $this->trailingDecimal = intval($values[1]);
+      }
+      else {
+
+        //isnt a decimal value
+        $this->moneyInDigit = $moneyDigit;
+      }
+
+
+      // Initialization
       $this->currency = $currency;
+      $this->$currencyForDecimal = $currencyForDecimal;
       $this->languageTo = $languageTo;
       $this->translator = new TranslateClient(null, $languageTo);
     }
@@ -172,6 +196,14 @@
      */
     public function Convert()
     {
+      if($this->isDecimal)
+      {
+        return $this->ConvertDecimal();
+      }
+
+      // CONTINUE IF NOT DECIMAL
+
+
       //check if input is in english numeric system
       if(!$this->IsLanguageEnglish())
       {
@@ -211,6 +243,26 @@
     }
 
 
+
+    private function ConvertDecimal()
+    {
+      $firstSection = $this->Convert();
+
+      $firstSection = str_replace(" only", "", $firstSection);
+
+      $tempValue = $this->moneyDigit;
+
+      $this->moneyDigit = $this->trailingDecimal;
+
+      //Convert decimal Values
+      $secondSection = $this->Convert();
+
+
+      //Restore settings back to defaults
+      $this->moneyDigit = $tempValue;
+
+      return $firstSection . " " . $secondSection . " {$this->currencyForDecimal} only";
+    }
 
 
     /**
