@@ -74,6 +74,7 @@
     {
       //If it is a decimal value
       if (strstr(strval($moneyDigit), '.')) {
+        // Use explode instead of split
         $values = explode('.', $moneyDigit);
 
 
