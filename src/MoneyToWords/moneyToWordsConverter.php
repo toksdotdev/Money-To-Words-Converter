@@ -74,7 +74,8 @@
     {
       //If it is a decimal value
       if (strstr(strval($moneyDigit), '.')) {
-        $values = split($moneyDigit, '.');
+        // Use explode instead of split
+        $values = explode('.', $moneyDigit);
 
 
         $this->moneyInDigit = intval($values[0]);
