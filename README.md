@@ -1,14 +1,22 @@
 # Money To Words Converter
 
+[![Packagist](https://img.shields.io/packagist/dt/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+[![Build Status](https://travis-ci.org/TNkemdilim/Money-To-Words-Converter.svg?branch=master)](https://travis-ci.org/TNkemdilim/Money-To-Words-Converter)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+[![Packagist](https://img.shields.io/packagist/v/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+
 A php library that converts any money value in digit in any language or numeric system to its words in any language
 
 # Installation
-* Install this package via [Composer](https://getcomposer.org).
+
+- Install this package via [Composer](https://getcomposer.org).
+
 ```php
-composer require tnkemdilim/money-to-words-converter 
+composer require tnkemdilim/money-to-words-converter
 ```
 
-* Or edit your project's ```composer.json``` to require ```tnkemdilim/money-to-words-converter``` and then run ```composer update ```.
+- Or edit your project's `composer.json` to require `tnkemdilim/money-to-words-converter` and then run `composer update`.
+
 ```php
 "require": {
     "tnkemdilim/money-to-words-converter": "*"
@@ -16,23 +24,26 @@ composer require tnkemdilim/money-to-words-converter
 ```
 
 # Usage
+
 **Basic usage**
-> Note: You should have composer's autoloader included ``` require 'vendor/autoload.php' ```
+
+> Note: You should have composer's autoloader included `require 'vendor/autoload.php'`
 
 <br>
 
-* Include **MoneyToWordsCoverter** namespace to your php file
+- Include **MoneyToWordsCoverter** namespace to your php file
 
 ```php
 <?php
 
-  use MoneyToWords\MoneyToWordsConverter;
+  use TNkemdilim\MoneyToWords\MoneyToWordsConverter;
 
 ?>
 ```
+
 <br>
 
-* Instantiate the **MoneyToWordsConverter** object
+- Instantiate the **MoneyToWordsConverter** object
 
 ```php
 //greek numeric system
@@ -43,10 +54,11 @@ $converter = new MoneyToWordsConverter($money, "naira");
 echo ($converter->Convert());
 
 ```
+
 <br>
 
-
 # Example
+
 ```php
 //chinese numeric system
 $money = "八百七十二万七千八百二十四";
@@ -56,14 +68,15 @@ $converter = new MoneyToWordsConverter($money, "yens", "fr");
 echo ($converter->Convert());
 
 ```
-> Find more numeric systems at [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems)
 
+> Find more numeric systems at [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems)
 
 <br>
 
-
 # Set Converted Money Language
+
 To set the language money should be translated into
+
 ```php
 $converter = new MoneyToWordsConverter($money, "yens", "fr"); //french
 $converter = new MoneyToWordsConverter($money, "yens"); //english is default
@@ -73,18 +86,19 @@ $converter = new MoneyToWordsConverter($money, "yens", "es"); //spanish
 <br>
 
 # Set a new language
+
 ```php
   $converter->SetLanguage('en');
   $converter->SetLanguage('fr');
   $converter->SetLanguage('zh-TW');
 ```
 
-
 <br>
 
-
 # Supported langauges
+
 For more conversion types
+
 <table>
   <tbody>
     <tr style="font-weight:bold">
@@ -262,9 +276,10 @@ For more conversion types
 
 <br>
 
-
 # Change Currency
+
 To change the currency of the money to convert
+
 ```php
 
 //dollar
@@ -277,17 +292,16 @@ echo ($converter->Convert());
 
 ```
 
-
 <br>
 
-
 # Set new currency value
+
 To convert a new currency value
+
 ```php
-//greek numeric system 
+//greek numeric system
 $converter->SetMoneyValue(28747847);
 
 //chinese numeric system
 $converter->SetMoneyValue("八百七十二万七千八百二十四");
 ```
-
