@@ -1,5 +1,10 @@
 # Money To Words Converter
 
+[![Packagist](https://img.shields.io/packagist/dt/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+[![Build Status](https://travis-ci.org/TNkemdilim/Money-To-Words-Converter.svg?branch=master)](https://travis-ci.org/TNkemdilim/Money-To-Words-Converter)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+[![Packagist](https://img.shields.io/packagist/v/tnkemdilim/money-to-words-converter.svg)](https://packagist.org/packages/tnkemdilim/money-to-words-converter)
+
 A php library that converts any money value in digit in any language or numeric system to its words in any language
 
 # Installation
