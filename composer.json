@@ -11,7 +11,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=5.3.0",
+    "php": "^7.1",
     "stichoza/google-translate-php": "~3.2"
   },
   "autoload": {
