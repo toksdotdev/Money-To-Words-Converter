@@ -73,7 +73,6 @@ $money = "八百七十二万七千八百二十四";
 $converter = new Converter("yen", "sen");
 echo ($converter->convert($money));
 
-
 // Example 2: but convert money value to french
 $frenchConverter = new Converter("yen", "sen", Language::FRENCH);
 echo ($frenchConverter->convert("八百七十二万七千八百二十四"));
