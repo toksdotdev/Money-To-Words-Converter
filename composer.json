@@ -1,22 +1,30 @@
 {
-    "name": "tnkemdilim/money-to-words-converter",
-    "description": "A php library that converts any money value in digit in any language or numeric system to its words in any language",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tochukwu Nkemdilim",
-            "email": "nkemdilimtochukwu@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-      "php": ">=5.3.0",
-      "stichoza/google-translate-php": "~3.2"
-    },
-    "autoload": {
-      "psr-0": {
-            "MoneyToWords": "src/"
-        }
+  "name": "tnkemdilim/money-to-words-converter",
+  "description": "A php library that converts any money value in digit in any language or numeric system to its words in any language",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tochukwu Nkemdilim",
+      "email": "nkemdilimtochukwu@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3.0",
+    "stichoza/google-translate-php": "~3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "TNkemdilim\\MoneyToWords\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.0@dev"
+  }
 }
