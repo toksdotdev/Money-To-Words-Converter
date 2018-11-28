@@ -7,7 +7,7 @@
 
 A php library that converts any money value in digit in any language or numeric system to its words in any language
 
-# Installation
+## Installation
 
 - Install this package via [Composer](https://getcomposer.org).
 
@@ -19,83 +19,94 @@ composer require tnkemdilim/money-to-words-converter
 
 ```php
 "require": {
-    "tnkemdilim/money-to-words-converter": "*"
+    "tnkemdilim/money-to-words-converter": "^2"
 }
 ```
 
-# Usage
-
-**Basic usage**
+## Usage
 
 > Note: You should have composer's autoloader included `require 'vendor/autoload.php'`
 
-<br>
+Always include **Conveter** namespace to your php file
 
-- Include **MoneyToWordsCoverter** namespace to your php file
+### Basic usage
 
 ```php
-<?php
+use TNkemdilim\MoneyToWords\Conveter;
 
-  use TNkemdilim\MoneyToWords\MoneyToWordsConverter;
-
-?>
+// Nigerian currency : naira & kobo
+$converter = new Conveter("naira", "kobo");
+echo ($converter->convert(374));
+echo ($converter->convert(23.45));
+echo ($converter->convert(748247284782));
+echo ($converter->convert(748247284782.34));
+echo ($converter->convert('34'));
+echo ($converter->convert('2345.34'));
+echo ($converter->convert('3453345'));
 ```
 
-<br>
+### Other Languages
 
-- Instantiate the **MoneyToWordsConverter** object
+To convert money value to other languages, you'll need to import the `Languages` namespace
 
-```php
-//greek numeric system
-$money = 748247284782;
+```PHP
+use TNkemdilim\MoneyToWords\Conveter;
+use TNkemdilim\MoneyToWords\Languages as Language;
 
-//naira
-$converter = new MoneyToWordsConverter($money, "naira");
-echo ($converter->Convert());
+$converter = new Conveter("naira", "kobo", Language::FRENCH);
 
+echo ($converter->convert(23.45));
+echo ($converter->convert("748247284782"));
 ```
 
-<br>
+## Convertion From Other Numeric System
 
-# Example
+Conversion from other numeric systems are supported in-built, and by default needs no extra configuration to convert into words.
+
+> Read more about [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems).
 
 ```php
-//chinese numeric system
+// Chinese numeric system
 $money = "八百七十二万七千八百二十四";
 
-//converts money value to french sentence,  with yen as a currency
-$converter = new MoneyToWordsConverter($money, "yens", "fr");
-echo ($converter->Convert());
+// Example 1
+$converter = new Converter("yen", "sen");
+echo ($converter->convert($money));
 
+// Example 2: but convert money value to french
+$frenchConverter = new Converter("yen", "sen", Language::FRENCH);
+echo ($frenchConverter->convert("八百七十二万七千八百二十四"));
 ```
 
-> Find more numeric systems at [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems)
+## Change Currency
 
-<br>
-
-# Set Converted Money Language
-
-To set the language money should be translated into
+To change the currency of the money to convert
 
 ```php
-$converter = new MoneyToWordsConverter($money, "yens", "fr"); //french
-$converter = new MoneyToWordsConverter($money, "yens"); //english is default
-$converter = new MoneyToWordsConverter($money, "yens", "es"); //spanish
+//  Dollars & Cents
+$converter->setCurrency("dollar", "cents");
+echo ($converter->convert(234.34)); // two hundred and thirty-four dollars, thirty-four cents only.
+
+// Pounds & Pence
+$converter->setCurrency("pounds", "pence");
+echo ($converter->convert('23.3')); // twenty three pounds, 3 pence only.
 ```
 
-<br>
+## Change Language Translation
 
-# Set a new language
+Language for translation can be easily changed as follows. All available languages can be accessed via the `TNkemdilim\MoneyToWords\Languages` class.
 
-```php
-  $converter->SetLanguage('en');
-  $converter->SetLanguage('fr');
-  $converter->SetLanguage('zh-TW');
+See all available in [Languages](./src/Languages.php).
+
+```PHP
+use TNkemdilim\MoneyToWords\Languages as Language;
+
+$converter->setLanguage(Language::LATIN);
+$converter->setLanguage(Language::SWAHILI);
+$converter->setLanguage(Language::GREEK);
 ```
 
-<br>
-
-# Supported langauges
+## Supported Langauges
 
 For more conversion types
 
@@ -274,34 +285,14 @@ For more conversion types
   </tbody>
 </table>
 
-<br>
+## Contribution
 
-# Change Currency
+1. Fork it!
+2. Create your feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -am 'Some commit message'`
+4. Push to the branch: `git push origin feature-name`
+5. Submit a pull request 😉😉
 
-To change the currency of the money to convert
+## License
 
-```php
-
-//dollar
-$converter->ChangeCurrency("dollar");
-echo ($converter->Convert());
-
-//pounds
-$converter->ChangeCurrency("pounds");
-echo ($converter->Convert());
-
-```
-
-<br>
-
-# Set new currency value
-
-To convert a new currency value
-
-```php
-//greek numeric system
-$converter->SetMoneyValue(28747847);
-
-//chinese numeric system
-$converter->SetMoneyValue("八百七十二万七千八百二十四");
-```
+MIT © Tochukwu Nkemdilim

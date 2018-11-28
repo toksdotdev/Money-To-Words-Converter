@@ -15,7 +15,7 @@ class EnglishConversionTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->converter = new Converter("naira", Language::ENGLISH, "kobo");
+        $this->converter = new Converter("naira", "kobo", Language::ENGLISH);
     }
 
     public function testWholeNumber()

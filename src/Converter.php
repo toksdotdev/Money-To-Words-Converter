@@ -87,8 +87,8 @@ class Converter
      */
     function __construct(
         $currencyForWhole,
-        $languageTo = Language::ENGLISH,
-        $currencyForDecimal = ''
+        $currencyForDecimal,
+        $languageTo = Language::ENGLISH
     ) {
         $this->setCurrency(trim($currencyForWhole), trim($currencyForDecimal));
         $this->translator = new Translator(trim($languageTo));
