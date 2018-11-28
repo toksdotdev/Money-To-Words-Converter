@@ -25,62 +25,87 @@ composer require tnkemdilim/money-to-words-converter
 
 # Usage
 
-**Basic usage**
-
 > Note: You should have composer's autoloader included `require 'vendor/autoload.php'`
 
-<br>
+Always include **Conveter** namespace to your php file
 
-- Include **MoneyToWordsCoverter** namespace to your php file
+## Basic usage
 
 ```php
 <?php
 
-  use TNkemdilim\MoneyToWords\MoneyToWordsConverter;
+use TNkemdilim\MoneyToWords\Conveter;
 
-?>
+// Nigerian currency : naira & kobo
+$converter = new Conveter("naira", "kobo");
+echo ($converter->convert(374));
+echo ($converter->convert(23.45));
+echo ($converter->convert(748247284782));
+echo ($converter->convert(748247284782.34));
+echo ($converter->convert('34'));
+echo ($converter->convert('2345.34'));
+echo ($converter->convert('3453345'));
 ```
 
-<br>
+## Other Languages
 
-- Instantiate the **MoneyToWordsConverter** object
+To convert money value to other languages, you'll need to import the `Languages` namespace
 
-```php
-//greek numeric system
-$money = 748247284782;
+```PHP
+use TNkemdilim\MoneyToWords\Conveter;
+use TNkemdilim\MoneyToWords\Languages as Language;
 
-//naira
-$converter = new MoneyToWordsConverter($money, "naira");
-echo ($converter->Convert());
+$converter = new Conveter("naira", "kobo", Language::FRENCH);
 
+echo ($converter->convert(23.45));
+echo ($converter->convert("748247284782"));
 ```
 
-<br>
+# Convertion From Other Numeric System
 
-# Example
+Conversion from other numeric systems are supported in-built, and by default needs no extra configuration to convert into words.
+
+> Read more about [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems).
 
 ```php
-//chinese numeric system
+// Chinese numeric system
 $money = "八百七十二万七千八百二十四";
 
-//converts money value to french sentence,  with yen as a currency
-$converter = new MoneyToWordsConverter($money, "yens", "fr");
-echo ($converter->Convert());
+// Example 1
+$converter = new Converter("yen", "sen");
+echo ($converter->convert($money));
 
+
+// Example 2: but convert money value to french
+$frenchConverter = new Converter("yen", "sen", Language::FRENCH);
+echo ($frenchConverter->convert("八百七十二万七千八百二十四"));
 ```
 
-> Find more numeric systems at [Numeric systems](https://en.wikipedia.org/wiki/List_of_numeral_systems)
+# Change Currency
 
-<br>
+To change the currency of the money to convert
 
-# Set Converted Money Language
+```php
+
+//  Dollars & Cents
+$converter->setCurrency("dollar", "cents");
+echo ($converter->convert(234.34)); // two hundred and thirty-four dollars, thirty-four cents only.
+
+// Pounds & Pence
+$converter->setCurrency("pounds", "pence");
+echo ($converter->convert('23.3')); // twenty three pounds, 3 pence only.
+```
+
+# Change Language Translation
 
 To set the language money should be translated into
 
 ```php
-$converter = new MoneyToWordsConverter($money, "yens", "fr"); //french
-$converter = new MoneyToWordsConverter($money, "yens"); //english is default
-$converter = new MoneyToWordsConverter($money, "yens", "es"); //spanish
+use TNkemdilim\MoneyToWords\Languages as Language;
+
+$converter->setLanguage(Language::LATIN);
+$converter->setLanguage(Language::SWAHILI);
+$converter->setLanguage(Language::GREEK);
 ```
 
 <br>
@@ -273,35 +298,3 @@ For more conversion types
     </tr>
   </tbody>
 </table>
-
-<br>
-
-# Change Currency
-
-To change the currency of the money to convert
-
-```php
-
-//dollar
-$converter->ChangeCurrency("dollar");
-echo ($converter->Convert());
-
-//pounds
-$converter->ChangeCurrency("pounds");
-echo ($converter->Convert());
-
-```
-
-<br>
-
-# Set new currency value
-
-To convert a new currency value
-
-```php
-//greek numeric system
-$converter->SetMoneyValue(28747847);
-
-//chinese numeric system
-$converter->SetMoneyValue("八百七十二万七千八百二十四");
-```
