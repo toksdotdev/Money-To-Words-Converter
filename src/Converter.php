@@ -137,7 +137,7 @@ class Converter
      * 
      * @return void
      */
-    public function setMoney(String $moneyValue)
+    private function _setMoney(String $moneyValue)
     {
         $moneyValue = trim($moneyValue);
         // Translate into greek numeric system of 0 - 9.
@@ -169,7 +169,7 @@ class Converter
      */
     public function convert($moneyValue)
     {
-        $this->setMoney($moneyValue);
+        $this->_setMoney($moneyValue);
 
         if ($this->isDecimal) {
             return $this->_convertWholeAndDecimalPart();

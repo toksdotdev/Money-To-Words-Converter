@@ -1,0 +1,15 @@
+{
+  "name": "Exmple",
+  "description": "Sample example project",
+  "authors": [
+    {
+      "name": "Tochukwu Nkemdilim",
+      "email": "nkemdilimtochukwu@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.5.0",
+    "tnkemdilim/money-to-words-converter": "^2.0"
+  }
+}
