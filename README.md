@@ -23,6 +23,10 @@ composer require tnkemdilim/money-to-words-converter
 }
 ```
 
+## Example
+
+For working example, checkout the [Example folder](./example).
+
 ## Usage
 
 > Note: You should have composer's autoloader included `require 'vendor/autoload.php'`
