@@ -2,6 +2,6 @@
 
 Steps to run example
 
-- Ensure you have composer installed.
-- On your command line, run `composer install` to install the necessary packages.
+- Ensure you have [Composer](https://getcomposer.org/) installed.
+- On this folder in your command line, run `composer install` to install the necessary packages.
 - Run `php src/Example.php`.
