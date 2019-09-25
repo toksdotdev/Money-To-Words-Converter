@@ -5,6 +5,24 @@ namespace TNkemdilim\MoneyToWords\Helpers;
 class StringProcessing
 {
     /**
+     * Checks if a string ends with
+     *
+     * @param [type] $haystack
+     * @param [type] $needle
+     * @param boolean $case
+     * @return void
+     */
+    public static function endsWith($haystack, $needle, $case = true)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
+
+    /**
      * Prefix a given string with a fixed amount of zero.
      * 
      * @param String  $stringVal    String to prefix

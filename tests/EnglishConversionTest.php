@@ -4,16 +4,15 @@
  * Autoload files using Composer autoload
  */
 
+use PHPUnit\Framework\TestCase;
 use TNkemdilim\MoneyToWords\Converter;
 use TNkemdilim\MoneyToWords\Languages as Language;
-use TNkemdilim\MoneyToWords\Exception;
-use PHPUnit\Framework\TestCase;
 
 class EnglishConversionTest extends TestCase
 {
     protected $converter;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->converter = new Converter("naira", "kobo", Language::ENGLISH);
     }
@@ -39,6 +38,24 @@ class EnglishConversionTest extends TestCase
         $this->assertEquals(
             $this->converter->convert("475923455"),
             "four hundred and seventy-five million, nine hundred and twenty-three thousand, four hundred and fifty-five naira only"
+        );
+    }
+
+    public function testLargeNumbers()
+    {
+        $this->assertEquals(
+            $this->converter->convert("50000000"),
+            "fifty million naira only"
+        );
+
+        $this->assertEquals(
+            $this->converter->convert("900000000000"),
+            "nine hundred billion naira only"
+        );
+
+        $this->assertEquals(
+            $this->converter->convert("900070000000"),
+            "nine hundred billion, seventy million naira only"
         );
     }
 
@@ -79,4 +96,3 @@ class EnglishConversionTest extends TestCase
 // $money = "八百七十二万七千八百二十四";
 
 // echo ($this->converter->convert($money) . "\n");
-?>
