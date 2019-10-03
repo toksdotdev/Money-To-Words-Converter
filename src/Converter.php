@@ -143,8 +143,9 @@ class Converter
         // Translate into greek numeric system of 0 - 9.
         if (!NumericSystem::isGreek($moneyValue)) {
             $moneyValue = $this->translator->toArabic($moneyValue);
-            var_dump($moneyValue);
         }
+
+        $moneyValue = number_format($moneyValue, 2, '.', '');
 
         $isDecimal = Digit::isDecimal($moneyValue);
 
