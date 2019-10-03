@@ -2,7 +2,7 @@
 
 namespace TNkemdilim\MoneyToWords\Grammar;
 
-use Stichoza\GoogleTranslate\TranslateClient;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 use TNkemdilim\MoneyToWords\Languages as Language;
 
 class Translator
@@ -10,7 +10,7 @@ class Translator
     /**
      * Google translator.
      * 
-     * @var Stichoza\GoogleTranslate\TranslateClient
+     * @var Stichoza\GoogleTranslate\GoogleTranslate
      */
     protected $translator;
 
@@ -29,7 +29,7 @@ class Translator
     function __construct(String $languageTo)
     {
         $this->languageTo = $languageTo;
-        $this->translator = new TranslateClient(null, $languageTo);
+        $this->translator = new GoogleTranslate($languageTo);
     }
 
     /**
