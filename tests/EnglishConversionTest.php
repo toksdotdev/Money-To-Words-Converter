@@ -88,7 +88,7 @@ class EnglishConversionTest extends TestCase
         );
         $this->assertEquals(
             $this->converter->convert("233464773.457"),
-            "two hundred and thirty-three million, four hundred and sixty-four thousand, seven hundred and seventy-three naira, four hundred and fifty-seven kobo only"
+            "two hundred and thirty-three million, four hundred and sixty-four thousand, seven hundred and seventy-three naira, forty-six kobo only"
         );
     }
 }
