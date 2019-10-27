@@ -110,7 +110,7 @@ $converter->setLanguage(Language::SWAHILI);
 $converter->setLanguage(Language::GREEK);
 ```
 
-## Supported Langauges
+## Supported Languages
 
 For more conversion types
 
