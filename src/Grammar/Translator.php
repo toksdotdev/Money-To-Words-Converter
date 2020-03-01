@@ -2,6 +2,7 @@
 
 namespace TNkemdilim\MoneyToWords\Grammar;
 
+use Exception;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use TNkemdilim\MoneyToWords\Languages as Language;
 
@@ -87,8 +88,7 @@ class Translator
             $translation = $this->translator->translate($string);
         } catch (Exception $ex) {
             throw new Exception("Error translating. Please insert a valid input");
-        }
-        finally {
+        } finally {
             $this->translator->setTarget($this->languageTo);
         }
 
