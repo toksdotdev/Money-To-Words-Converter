@@ -13,7 +13,7 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.1",
-    "stichoza/google-translate-php": "~4.0"
+    "google/cloud-translate": "^1.7"
   },
   "autoload": {
     "psr-4": {

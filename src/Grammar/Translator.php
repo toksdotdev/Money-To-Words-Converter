@@ -3,7 +3,8 @@
 namespace TNkemdilim\MoneyToWords\Grammar;
 
 use Exception;
-use Stichoza\GoogleTranslate\GoogleTranslate;
+use Google\Cloud\Translate\TranslateClient;
+use Google\Cloud\Core\Exception\ServiceException;
 use TNkemdilim\MoneyToWords\Languages as Language;
 
 class Translator
@@ -30,7 +31,7 @@ class Translator
     function __construct(String $languageTo)
     {
         $this->languageTo = $languageTo;
-        $this->translator = new GoogleTranslate($languageTo);
+        $this->translator = new TranslateClient();
     }
 
     /**
@@ -43,7 +44,6 @@ class Translator
     public function setLanguage(Language $languageTo)
     {
         $this->$languageTo = $languageTo;
-        $this->translator->setTarget($languageTo);
     }
 
     /**
@@ -66,7 +66,12 @@ class Translator
     public function translate(String $string)
     {
         try {
-            return $this->translator->translate($string);
+            return $this->translator->translate(
+                $string,
+                ['target' => $this->languageTo]
+            );
+        } catch (ServiceException $ex) {
+            throw new Exception($ex->getMessage());
         } catch (Exception $ex) {
             throw new Exception("Error translating. Please insert a valid input");
         }
@@ -83,13 +88,13 @@ class Translator
     public function to(String $string, String $language)
     {
         $translation = null;
+        $tempLanguageTo = $this->languageTo;
+
         try {
-            $this->translator->setTarget($language);
-            $translation = $this->translator->translate($string);
-        } catch (Exception $ex) {
-            throw new Exception("Error translating. Please insert a valid input");
+            $this->languageTo = $language;
+            $translation = $this->translate($string);
         } finally {
-            $this->translator->setTarget($this->languageTo);
+            $this->languageTo = $tempLanguageTo;
         }
 
         return $translation;
