@@ -7,6 +7,12 @@
 
 A php library that converts any money value in digit in any language or numeric system to its words in any language
 
+## Caveat
+
+Currently, this library relies on [stichoza/google-translate-php](https://github.com/Stichoza/google-translate-php#known-limitations) which could result in periodic `400 Bad Request` as highlighted [here](https://github.com/Stichoza/google-translate-php#known-limitations) and [here](https://github.com/tnkemdilim/Money-To-Words-Converter/issues/21).
+
+If you care about reliability, kindly checkout a managed API service I run: [Tuforty](https://tuforty.com).
+
 ## Installation
 
 - Install this package via [Composer](https://getcomposer.org).
